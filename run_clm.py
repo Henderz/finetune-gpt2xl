@@ -388,6 +388,13 @@ def main():
         result["labels"] = result["input_ids"].copy()
         return result
 
+    def DONT_group_texts(examples):
+        result = {}
+        for k in examples.keys():
+            result[k] = [text[i: i + block_size] for text in examples[k] for i in range(0, len(text), block_size)]
+        result["labels"] = result["input_ids"].copy()
+        return result
+    
     # Note that with `batched=True`, this map processes 1,000 texts together, so group_texts throws away a remainder
     # for each of those groups of 1,000 texts. You can adjust that batch_size here but a higher value might be slower
     # to preprocess.
@@ -396,7 +403,7 @@ def main():
     # https://huggingface.co/docs/datasets/package_reference/main_classes.html#datasets.Dataset.map
 
     lm_datasets = tokenized_datasets.map(
-        group_texts,
+        DONT_group_texts,
         batched=True,
         num_proc=data_args.preprocessing_num_workers,
         load_from_cache_file=not data_args.overwrite_cache,
