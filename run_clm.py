@@ -404,13 +404,13 @@ def main():
         return result
     
     def splitByBlockSize(examples):
-    result = {}
-    for k in examples.keys():
-        result[k] = [text[i: i + block_size] + [tokenizer.eos_token_id] * (block_size - len(text[i: i + block_size]))
-                     for text in examples[k]
-                     for i in range(0, len(text), block_size)]
-    result["labels"] = result["input_ids"].copy()
-    return result
+        result = {}
+        for k in examples.keys():
+            result[k] = [text[i: i + block_size] + [tokenizer.eos_token_id] * (block_size - len(text[i: i + block_size]))
+                         for text in examples[k]
+                         for i in range(0, len(text), block_size)]
+        result["labels"] = result["input_ids"].copy()
+        return result
 
     
     # Note that with `batched=True`, this map processes 1,000 texts together, so group_texts throws away a remainder
